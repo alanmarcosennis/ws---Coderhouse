@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Proyecto Handlebars y Websocket</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        socket.on('productCreated', (product) => {
+            // Lógica para actualizar la lista de productos en tiempo real
+            const productList = document.querySelector('#product-list');
+            const listItem = document.createElement('li');
+            listItem.textContent = product.name;
+            productList.appendChild(listItem);
+        });
+
+        socket.on('productDeleted', (productId) => {
+            // Lógica para actualizar la lista de productos en tiempo real
+            const productList = document.querySelector('#product-list');
+            const listItem = productList.querySelector(`[data-product-id="${productId}"]`);
+            if (listItem) {
+                listItem.remove();
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <h1>Lista de productos en tiempo real</h1>
+    <ul id="product-list">
+        {{#each products}}
+        <li data-product-id="{{this.id}}">{{this.name}}</li>
+        {{/each}}
+    </ul>
+</body>
+
+</html>
