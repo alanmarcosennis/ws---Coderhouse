@@ -6,17 +6,22 @@ const exphbs = require('express-handlebars');
 
 // Configuración de Handlebars
 const handlebars = exphbs.create({
-  /* opciones de configuración */
+  // Opción para especificar la carpeta donde se encuentran los layouts
+  // layoutsDir: __dirname + '/views/layouts',
+  
+  // Opción para especificar la carpeta donde se encuentran las vistas parciales
+  partialsDir: __dirname + '/views/partials',
+  
+  // Opción para especificar la extensión de los archivos de plantilla
+  extname: '.handlebars',
 });
 
+// Establecer el motor de plantillas
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
 // Middleware para servir archivos estáticos
 app.use(express.static('public'));
-
-// // Array para almacenar los productos
-// let products = [];
 
 // Array para almacenar los productos
 let products = [
@@ -26,24 +31,17 @@ let products = [
 ];
 
 // Rutas
-// app.get('/', (req, res) => {
-//   res.render('home');
-// });
-
-// app.get('/realtimeproducts', (req, res) => {
-//   res.render('realTimeProducts', { products });
-// });
 app.get('/', (req, res) => {
-  console.log('Renderizando la vista home');
-  res.render('home');
+  res.render('index');
+});
+
+app.get('/home', (req, res) => {
+  res.render('home', { products: products });
 });
 
 app.get('/realtimeproducts', (req, res) => {
-  console.log('Renderizando la vista realtimeproducts');
-  res.render('realTimeProducts', { products });
+  res.render('realTimeProducts', { products: products });
 });
-
-
 
 // Inicialización del servidor de Socket.IO
 io.on('connection', (socket) => {
